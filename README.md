@@ -25,8 +25,8 @@ Docker Compose.
 
 This docker compose environment brings up four services:
 
-1. The main Argus API backend (http port 8000)
-2. The main Argus frontend application (http port 80)
+1. [The main Argus API backend](https://github.com/Uninett/Argus) (http port 8000)
+2. [The main Argus frontend application](https://github.com/Uninett/Argus-frontend) (http port 80)
 3. A PostgreSQL server for persistent storage of Argus data
 4. A Redis server that acts as a message broker for websocket communication
    between the frontend and backend components.
