@@ -1,0 +1,59 @@
+version: '3.5'
+services:
+  frontend:
+    build:
+      context: frontend
+      args:
+        - REACT_APP_BACKEND_URL=${ARGUS_BACKEND_URL}
+        - REACT_APP_ENABLE_WEBSOCKETS_SUPPORT=true
+        - REACT_APP_BACKEND_WS_URL=${ARGUS_BACKEND_WEBSOCKET_URL}
+        - REACT_APP_USE_SECURE_COOKIE=false
+        - REACT_APP_DEBUG=false
+        - REACT_APP_DEFAULT_AUTO_REFRESH_INTERVAL=30
+        - REACT_APP_REALTIME_SERVICE_MAX_RETRIES=5
+        - REACT_APP_COOKIE_DOMAIN=${ARGUS_DOMAIN}
+    depends_on:
+      - api
+    ports:
+      - "80:8080"
+
+  api:
+    build:
+      context: api
+      args:
+        BRANCH: master
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - TIME_ZONE=${TIME_ZONE}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+      - ARGUS_FRONTEND_URL=${ARGUS_FRONTEND_URL}
+      - ARGUS_REDIS_SERVER=redis
+      - ARGUS_COOKIE_DOMAIN=${ARGUS_DOMAIN}
+      - STATIC_ROOT=static/
+      - EMAIL_HOST=${EMAIL_HOST}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+
+      - ARGUS_DATAPORTEN_KEY=notset
+      - ARGUS_DATAPORTEN_SECRET=notset
+
+  postgres:
+    image: "postgres:12"
+    volumes:
+      - postgres:/var/lib/postgresql/data:Z
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+  redis:
+    image: "redis:latest"
+
+volumes:
+  postgres:
+    driver: local
