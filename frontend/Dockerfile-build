@@ -1,0 +1,32 @@
+# This image installs all dependencies and pre-builds an Argus Frontend
+# version, in the hopes that a rebuild for production will be faster.
+FROM node:16-bullseye
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends tini git
+
+
+ARG GITREF=master
+ARG REPO=https://github.com/Uninett/argus-frontend.git
+RUN git clone -b ${GITREF} ${REPO} /app
+
+RUN npm ci
+RUN npx browserslist@latest --update-db
+
+# These arguments are needed in the environment to properly configure and build
+# Argus-frontend:
+ARG REACT_APP_BACKEND_URL=http://argus.example.org
+ARG REACT_APP_ENABLE_WEBSOCKETS_SUPPORT=true
+ARG REACT_APP_BACKEND_WS_URL=wss://argus.example.org/ws
+ARG REACT_APP_USE_SECURE_COOKIE=true
+ARG REACT_APP_DEBUG=true
+ARG REACT_APP_DEFAULT_AUTO_REFRESH_INTERVAL=30
+ARG REACT_APP_REALTIME_SERVICE_MAX_RETRIES=5
+ARG REACT_APP_COOKIE_DOMAIN=argus.example.org
+
+RUN npm run build
+
+ONBUILD RUN npm run build
+
+# When used as an intermediate builder image, the complete set of statically
+# built files to serve from the web server root can be copied from /app/build
