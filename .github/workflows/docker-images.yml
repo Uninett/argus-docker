@@ -33,6 +33,7 @@ jobs:
           file: frontend/Dockerfile-build
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/argus-frontend-builder:1.6.1
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           build-args: |
             VERSION=1.6.1
 
@@ -42,6 +43,7 @@ jobs:
           context: api
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/argus-api:1.9.0
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           build-args: |
             GITREF=v1.9.0
             
