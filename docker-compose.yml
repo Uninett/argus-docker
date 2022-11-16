@@ -18,10 +18,7 @@ services:
       - "80:8080"
 
   api:
-    build:
-      context: api
-      args:
-        - BRANCH=master
+    image: ghcr.io/uninett/argus-api:1.9.0
 
     ports:
       - "8000:8000"
