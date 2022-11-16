@@ -59,6 +59,15 @@ where the configuration is compiled statically into the resulting JavaScript
 code files. This means all the configuration options are build-time options,
 not run-time options.
 
-I.e. the frontend service needs to be custom built for your deployment, so
-basing it on a pre-built image is not an option.
+I.e every configuration change you make in `.env` that affects the frontend
+will cause a re-build of the frontend image and containers.
 
+### Troubleshooting on MacOS
+
+The images referred to by `docker-compose.yml` are hosted as GitHub packages on
+the `gchr.io` domain.  If you're attempting to run this Docker Compose
+environment on Docker Desktop for MacOS, you may have problems pulling these
+images. If your are getting messages about being `denied` the pull operations,
+you must go into the Docker Desktop settings menu. Under the "Beta features"
+tab, you must enable the option "Use containerd for pulling and storing
+images".
