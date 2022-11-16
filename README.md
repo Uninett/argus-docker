@@ -65,7 +65,7 @@ will cause a re-build of the frontend image and containers.
 ### Troubleshooting on MacOS
 
 The images referred to by `docker-compose.yml` are hosted as GitHub packages on
-the `gchr.io` domain.  If you're attempting to run this Docker Compose
+the `ghcr.io` domain.  If you're attempting to run this Docker Compose
 environment on Docker Desktop for MacOS, you may have problems pulling these
 images. If your are getting messages about being `denied` the pull operations,
 you must go into the Docker Desktop settings menu. Under the "Beta features"
