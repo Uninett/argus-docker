@@ -19,7 +19,7 @@ services:
       - "80:8080"
 
   api:
-    image: ghcr.io/uninett/argus-api:1.9.0
+    image: ghcr.io/uninett/argus:1.9.0
 
     ports:
       - "8000:8000"
