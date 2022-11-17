@@ -4,6 +4,7 @@ services:
     build:
       context: frontend
       args:
+        - VERSION=1.6.1
         - REACT_APP_BACKEND_URL=${ARGUS_BACKEND_URL}
         - REACT_APP_ENABLE_WEBSOCKETS_SUPPORT=true
         - REACT_APP_BACKEND_WS_URL=${ARGUS_BACKEND_WEBSOCKET_URL}

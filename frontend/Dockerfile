@@ -1,4 +1,5 @@
-FROM ghcr.io/uninett/argus-frontend-builder:1.6.1 AS build
+ARG VERSION=1.6.1
+FROM ghcr.io/uninett/argus-frontend:${VERSION} AS build
 
 # These arguments are needed in the environment to properly configure and build
 # Argus-frontend for this site:
