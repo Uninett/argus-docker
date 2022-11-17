@@ -1,0 +1,14 @@
+name: Build Docker Compose environment
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build docker-compose.yml
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: docker compose build
+        run: |
+          docker compose build
