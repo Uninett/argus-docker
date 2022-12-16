@@ -1,7 +1,7 @@
 # Argus production deployment examples using Docker
 
 This repository contains a simple, but complete Argus deployment example using
-Docker Compose.
+[Docker Compose](https://docs.docker.com/compose/).
 
 ## TL;DR
 
