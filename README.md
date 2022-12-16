@@ -34,7 +34,7 @@ This docker compose environment brings up four services:
 
 ### Configuration
 
-Minimally, you need to alter the configuration in the `.env` file to suit your
+Minimally, you need to alter the configuration in the [`.env`](./.env) file to suit your
 setup (including generating the keys/random strings that should be unique for
 your site!).
 
@@ -44,6 +44,13 @@ aware that the complete application consists of *2 web sites*:
 1. The frontend, pre-configured at build time to access the backend at the
    configured domain name.
 2. The backend API server.
+
+#### Changing port numbers
+
+By default, the frontend service (which you normally visit using your browser)
+is configured to bind to your system's port *80*, while the backend is bound to
+port *8000*. If you, for some reason, wish to change this, set the
+`ARGUS_FRONTEND_PORT` and `ARGUS_BACKEND_PORT` variables in [`.env`](./.env).
 
 ### SSL
 
@@ -60,7 +67,7 @@ where the configuration is compiled statically into the resulting JavaScript
 code files. This means all the configuration options are build-time options,
 not run-time options.
 
-I.e every configuration change you make in `.env` that affects the frontend
+I.e every configuration change you make in [`.env`](./.env) that affects the frontend
 will cause a re-build of the frontend image and containers.
 
 ### Troubleshooting on MacOS

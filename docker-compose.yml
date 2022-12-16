@@ -16,13 +16,13 @@ services:
     depends_on:
       - api
     ports:
-      - "80:8080"
+      - "${ARGUS_FRONTEND_PORT}:8080"
 
   api:
     image: ghcr.io/uninett/argus:1.9.0
 
     ports:
-      - "8000:8000"
+      - "${ARGUS_BACKEND_PORT}:8000"
     depends_on:
       - postgres
       - redis
