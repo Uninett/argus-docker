@@ -5,7 +5,8 @@ Docker Compose.
 
 ## TL;DR
 
-1. Type `docker compose up`.
+1. Type `docker compose up` (depending on your system, the command may be
+   `docker-compose` instead of `docker compose`)
 
 2. After getting the docker compose environment up and running, you must create
    your initial admin user, thus:
