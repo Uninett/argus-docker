@@ -1,18 +1,16 @@
 version: '3.5'
 services:
   frontend:
-    build:
-      context: frontend
-      args:
-        - VERSION=1.6.1
-        - REACT_APP_BACKEND_URL=${ARGUS_BACKEND_URL}
-        - REACT_APP_ENABLE_WEBSOCKETS_SUPPORT=true
-        - REACT_APP_BACKEND_WS_URL=${ARGUS_BACKEND_WEBSOCKET_URL}
-        - REACT_APP_USE_SECURE_COOKIE=false
-        - REACT_APP_DEBUG=false
-        - REACT_APP_DEFAULT_AUTO_REFRESH_INTERVAL=30
-        - REACT_APP_REALTIME_SERVICE_MAX_RETRIES=5
-        - REACT_APP_COOKIE_DOMAIN=${ARGUS_DOMAIN}
+    image: ghcr.io/uninett/argus-frontend:1.13.0
+    environment:
+      - REACT_APP_BACKEND_URL=${ARGUS_BACKEND_URL}
+      - REACT_APP_ENABLE_WEBSOCKETS_SUPPORT=true
+      - REACT_APP_BACKEND_WS_URL=${ARGUS_BACKEND_WEBSOCKET_URL}
+      - REACT_APP_USE_SECURE_COOKIE=false
+      - REACT_APP_DEBUG=false
+      - REACT_APP_DEFAULT_AUTO_REFRESH_INTERVAL=30
+      - REACT_APP_REALTIME_SERVICE_MAX_RETRIES=5
+      - REACT_APP_COOKIE_DOMAIN=${ARGUS_DOMAIN}
     depends_on:
       - api
     ports:
