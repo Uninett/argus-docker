@@ -60,16 +60,6 @@ Docker Compose, we suggest looking at including
 https://github.com/nginx-proxy/acme-companion into your `docker-compose.yml`
 (or maybe preferably, into `docker-compose.override.yml`).
 
-### UI configuration
-
-As it stands, the front-end user interface is a React/TypeScript application,
-where the configuration is compiled statically into the resulting JavaScript
-code files. This means all the configuration options are build-time options,
-not run-time options.
-
-I.e every configuration change you make in [`.env`](./.env) that affects the frontend
-will cause a re-build of the frontend image and containers.
-
 ### Troubleshooting on MacOS
 
 The images referred to by `docker-compose.yml` are hosted as GitHub packages on
