@@ -1,0 +1,51 @@
+name: Change docker-compose.yml on release in Argus/Argus-frontend
+
+on:
+  repository_dispatch:
+    types: [trigger-release]
+
+jobs:
+  change-dockerfile-on-release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.client_payload.repository }} == "Argus" || ${{ github.event.client_payload.repository }} == "Argus-frontend"
+    permissions: 
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy repository name & version into environment variables
+        run: |
+          repository="${{ github.event.client_payload.repository }}"
+          version="${{ github.event.client_payload.version }}"
+          # Remove 'v' from version (e.g. v1.14.0 -> 1.14.0)
+          version="${version:1}"
+          # Make repository name lowercase
+          repository="${repository,}"
+          echo "REPOSITORY=$repository" >> $GITHUB_ENV
+          echo "VERSION=$version" >> $GITHUB_ENV
+      
+      - name: Create and switch to new branch
+        run: |
+          git switch -c update-${{ env.REPOSITORY }}-v${{ env.VERSION }}
+      
+      - name: Change version number in docker-compose.yml to newest
+        run: |
+          sed -i -e 's/${{ env.REPOSITORY }}:[0-9]\+.[0-9]\+.[0-9]\+/${{ env.REPOSITORY }}:${{ env.VERSION }}/' docker-compose.yml
+      
+      - name: Add, commit and push changes
+        run: |
+          git config user.email "kontakt@sikt.no"
+          git config user.name "Release update bot"
+          git add "docker-compose.yml"
+          git commit -m "Update ${{ env.REPOSITORY }} version to ${{ env.VERSION }}"
+          git push -u origin update-${{ env.REPOSITORY }}-v${{ env.VERSION }}
+      
+      - name: Create pull request
+        run: |
+          gh pr create -B master -H update-${{ env.REPOSITORY }}-v${{ env.VERSION }} \
+          --title 'Update ${{ env.REPOSITORY }} version to ${{ env.VERSION }} in docker-compose.yml' \
+          --body 'Created by GitHub action, triggered by a release in ${{ env.REPOSITORY }} of version ${{ env.VERSION }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
