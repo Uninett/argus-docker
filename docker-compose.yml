@@ -39,7 +39,7 @@ services:
       - ARGUS_DATAPORTEN_SECRET=notset
 
   postgres:
-    image: "postgres:12"
+    image: "postgres:14"
     volumes:
       - postgres:/var/lib/postgresql/data:Z
     environment:
