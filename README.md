@@ -69,3 +69,8 @@ images. If your are getting messages about being `denied` the pull operations,
 you must go into the Docker Desktop settings menu. Under the "Beta features"
 tab, you must enable the option "Use containerd for pulling and storing
 images".
+
+
+### What is Argus, anyway?
+
+You can read more about Argus itself at the [Argus homepage](https://network.geant.org/argus/) or in the [official Argus documentation](https://argus-server.readthedocs.io/en/latest/).
