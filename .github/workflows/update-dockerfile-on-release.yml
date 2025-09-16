@@ -1,4 +1,4 @@
-name: Change docker-compose.yml on release in Argus/Argus-frontend
+name: Change docker-compose.yml on release in Argus
 
 on:
   repository_dispatch:
@@ -7,7 +7,7 @@ on:
 jobs:
   change-dockerfile-on-release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.client_payload.repository }} == "Argus" || ${{ github.event.client_payload.repository }} == "Argus-frontend"
+    if: ${{ github.event.client_payload.repository }} == "Argus"
     permissions: 
       contents: write
       pull-requests: write
