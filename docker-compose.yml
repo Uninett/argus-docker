@@ -1,22 +1,24 @@
+x-argus: &argus-service
+  image: ghcr.io/uninett/argus:2.7.0
+  depends_on:
+    - postgres
+  environment:
+    - SECRET_KEY=${SECRET_KEY}
+    - TIME_ZONE=${TIME_ZONE}
+    - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    - ARGUS_FRONTEND_URL=${ARGUS_FRONTEND_URL}
+    - STATIC_ROOT=static/
+    - EMAIL_HOST=${EMAIL_HOST}
+    - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+    - ARGUS_DATAPORTEN_KEY=notset
+    - ARGUS_DATAPORTEN_SECRET=notset
+
 services:
   api:
-    image: ghcr.io/uninett/argus:2.7.0
-
+    <<: *argus-service
     ports:
       - "${ARGUS_BACKEND_PORT}:8000"
-    depends_on:
-      - postgres
-    environment:
-      - SECRET_KEY=${SECRET_KEY}
-      - TIME_ZONE=${TIME_ZONE}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
-      - ARGUS_FRONTEND_URL=${ARGUS_FRONTEND_URL}
-      - STATIC_ROOT=static/
-      - EMAIL_HOST=${EMAIL_HOST}
-      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
 
-      - ARGUS_DATAPORTEN_KEY=notset
-      - ARGUS_DATAPORTEN_SECRET=notset
     # Disable IPv6 to avoid slow DB connection setup. Docker may assign IPv6
     # addresses to containers but not route traffic correctly, causing libpq to
     # timeout on IPv6 before falling back to IPv4 on every request.
