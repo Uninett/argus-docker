@@ -25,6 +25,10 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
 
+  db-task-queue:
+    <<: *argus-service
+    command: ["/cmd-dbqueue.sh"]
+
   postgres:
     image: "postgres:14"
     volumes:
