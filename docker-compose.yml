@@ -1,5 +1,5 @@
 x-argus: &argus-service
-  image: ghcr.io/uninett/argus:2.7.0
+  image: ghcr.io/uninett/argus:2.8.0
   depends_on:
     - postgres
   environment:
