@@ -17,6 +17,11 @@ services:
 
       - ARGUS_DATAPORTEN_KEY=notset
       - ARGUS_DATAPORTEN_SECRET=notset
+    # Disable IPv6 to avoid slow DB connection setup. Docker may assign IPv6
+    # addresses to containers but not route traffic correctly, causing libpq to
+    # timeout on IPv6 before falling back to IPv4 on every request.
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
 
   postgres:
     image: "postgres:14"
