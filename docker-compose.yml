@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/uninett/argus:2.7.0
+    image: ghcr.io/uninett/argus:2.8.0
 
     ports:
       - "${ARGUS_BACKEND_PORT}:8000"
