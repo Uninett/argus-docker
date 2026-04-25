@@ -70,4 +70,6 @@ images".
 
 ### What is Argus, anyway?
 
-You can read more about Argus itself at the [Argus homepage](https://network.geant.org/argus/) or in the [official Argus documentation](https://argus-server.readthedocs.io/en/latest/).
+You can read more about Argus itself at the
+[Argus homepage](https://network.geant.org/argus/) or in the
+[official Argus documentation](https://argus-server.readthedocs.io/en/latest/).
