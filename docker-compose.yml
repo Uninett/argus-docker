@@ -7,11 +7,8 @@ x-argus: &argus-service
     - TIME_ZONE=${TIME_ZONE}
     - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
     - ARGUS_FRONTEND_URL=${ARGUS_FRONTEND_URL}
-    - STATIC_ROOT=static/
     - EMAIL_HOST=${EMAIL_HOST}
     - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
-    - ARGUS_DATAPORTEN_KEY=notset
-    - ARGUS_DATAPORTEN_SECRET=notset
 
 services:
   api:
