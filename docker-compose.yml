@@ -56,7 +56,7 @@ services:
         condition: service_healthy
 
   postgres:
-    image: "postgres:14"
+    image: "postgres:17"
     volumes:
       - postgres:/var/lib/postgresql/data:Z
     environment:

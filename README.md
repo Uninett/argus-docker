@@ -127,6 +127,39 @@ supplying a custom settings module. See
 [site-specific settings](https://argus-server.readthedocs.io/en/latest/reference/site-specific-settings.html)
 and the integration pages above for the specifics.
 
+### Upgrading PostgreSQL
+
+This example pins a specific PostgreSQL major version (currently `17`). For a
+fresh deployment there is nothing special to do — bring the stack up and the
+database is initialised on first start.
+
+Upgrading an *existing* deployment to a newer major version is **not** just a
+matter of bumping the image tag. PostgreSQL's on-disk data format changes
+between major versions, and the official `postgres` image will not migrate it
+for you: starting, say, a `postgres:17` container on a data volume created by
+`postgres:14` fails with a "database files are incompatible with server" error.
+The data has to be migrated explicitly. **Back up the `postgres` volume before
+attempting any upgrade.**
+
+The common approaches are:
+
+* **Dump and restore** with `pg_dumpall` — the most portable method.
+* **`pg_upgrade`** — faster, reuses the existing data files.
+* **A drop-in helper image** such as
+  [`pgautoupgrade`](https://github.com/pgautoupgrade/docker-pgautoupgrade), which
+  runs `pg_upgrade` automatically against the existing volume.
+
+See the PostgreSQL documentation on
+[Upgrading a PostgreSQL Cluster](https://www.postgresql.org/docs/current/upgrading.html)
+and [`pg_upgrade`](https://www.postgresql.org/docs/current/pgupgrade.html), and
+the [docker-library/postgres upgrade discussion](https://github.com/docker-library/postgres/issues/37)
+for why the image leaves this to you and how others automate it.
+
+Note also that PostgreSQL **18** moved its data directory to
+`/var/lib/postgresql/18/data`; upgrading to 18 or later therefore also requires
+changing the `postgres` volume mount in
+[`docker-compose.yml`](./docker-compose.yml), not just the image tag.
+
 ### Troubleshooting on MacOS
 
 The images referred to by `docker-compose.yml` are hosted as GitHub packages on
