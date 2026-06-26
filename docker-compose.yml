@@ -1,7 +1,5 @@
 x-argus: &argus-service
   image: ghcr.io/uninett/argus:2.9.1
-  depends_on:
-    - postgres
   environment:
     - SECRET_KEY=${SECRET_KEY}
     - TIME_ZONE=${TIME_ZONE}
@@ -22,9 +20,40 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
 
+    # Don't start running migrations until PostgreSQL actually accepts
+    # connections.
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    # Report healthy only once the database schema is fully migrated. This is
+    # the signal the db-task-queue worker waits for: cmd-argus.sh runs
+    # "django-admin migrate" before launching gunicorn, and "migrate --check"
+    # exits non-zero until every migration has been applied.
+    #
+    # start_interval polls every couple of seconds *during* startup so the
+    # worker is released as soon as migrations finish, while the steady-state
+    # interval stays lazy (migrate --check spins up Django on each run).
+    healthcheck:
+      test: ["CMD", "django-admin", "migrate", "--check"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+      start_interval: 2s
+
   db-task-queue:
     <<: *argus-service
     command: ["/cmd-dbqueue.sh"]
+
+    # The worker (django-tasks "db_worker") reads tables that only exist after
+    # the api service has migrated the database. Without this gate it crashes
+    # repeatedly on first startup and eventually gives up.
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
 
   postgres:
     image: "postgres:14"
@@ -34,6 +63,15 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    # PostgreSQL is ready within a second or two, so poll once a second during
+    # the start period to mark it healthy promptly, then relax.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 1s
 
 volumes:
   postgres:
